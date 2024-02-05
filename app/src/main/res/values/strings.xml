@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Lab2ATipCalculator</string>
+    <string name="bill_text">Total Bill:</string>
+    <string name="percent_text">Tip Percentage:</string>
+    <string name="people_text">Number of People:</string>
+    <string name="total_text">Total Per Person: %1$s</string>
+    <string name="calculate_button">Calculate</string>
 </resources>
