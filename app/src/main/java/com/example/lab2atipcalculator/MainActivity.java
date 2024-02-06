@@ -3,22 +3,17 @@ package com.example.lab2atipcalculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
 import android.view.View;
+import java.text.NumberFormat;
 
 import com.example.lab2atipcalculator.databinding.ActivityMainBinding;
-
-import java.text.Format;
-import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-    Editable bill_input, percent_input, people_input;
+    String bill_input, percent_input, people_input, totalFormat;
     int percent, people;
     double bill, total;
-    String totalFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +25,12 @@ public class MainActivity extends AppCompatActivity {
         binding.calButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bill_input = binding.billInput.getText();
-                percent_input =  binding.percentInput.getText();
-                people_input = binding.peopleInput.getText();
+                bill_input = binding.billInput.getText().toString();
+                percent_input =  binding.percentInput.getText().toString();
+                people_input = binding.peopleInput.getText().toString();
 
                 if (isValidCheck()){
-                    total = calculateTotal();
-                    totalFormat = NumberFormat.getCurrencyInstance().format(total);
-
-                    binding.totalText.setText(getResources().getString(R.string.total_text, totalFormat));
+                    calculateTotal();
                 }
             }
         });
@@ -46,15 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean isValidCheck(){
 
-        bill = Double.parseDouble(bill_input.toString());
-        percent = Integer.parseInt(percent_input.toString());
-        people = Integer.parseInt(people_input.toString());
-
-        if (TextUtils.isEmpty(bill_input) || TextUtils.isEmpty(percent_input)
-            || TextUtils.isEmpty(people_input)){
+        if (bill_input.isEmpty() || percent_input.isEmpty()
+            || people_input.isEmpty()){
             return false;
         }
-        else if (bill == 0 || percent == 0 || people ==0){
+        else if (bill_input.equals(".")){
             return false;
         }
         else{
@@ -62,9 +50,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public double calculateTotal(){
-        total = ((bill * percent/100) + bill)/ people;
+    public void calculateTotal(){
+        bill = Double.parseDouble(bill_input);
+        percent = Integer.parseInt(percent_input);
+        people = Integer.parseInt(people_input);
 
-        return total;
+        if (bill != 0 && percent != 0 && people != 0) {
+            total = ((bill * percent / 100) + bill) / people;
+            totalFormat = NumberFormat.getCurrencyInstance().format(total);
+
+            binding.totalText.setText(getResources().getString(R.string.total_text, totalFormat));
+        }
     }
 }
